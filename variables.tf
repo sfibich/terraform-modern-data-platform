@@ -35,7 +35,7 @@ variable "password" {
 
 variable "tags" {
   default = {
-    project = "terraform-vm-headless-linux"
+    project = "terraform-modern-data-platform"
   }
   description = "The generic tags for this project that go on all resources"
   type        = map(string)

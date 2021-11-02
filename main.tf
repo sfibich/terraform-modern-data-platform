@@ -18,3 +18,30 @@ resource "azurerm_resource_group" "main" {
   tags     = local.main_tags
 }
 
+resource "azurerm_resource_group" "managed" {
+  name     = "${var.prefix}-mngd-${var.machine_number}-rg"
+  location = var.location
+  tags     = local.main_tags
+}
+
+
+resource "azurerm_databricks_workspace" "mdp" {
+  name                = "${var.prefix}-adb-${var.machine_number}"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  sku                 = "standard"
+
+  managed_resource_group_name = azurerm_resource_group.managed.name
+
+  #managed_services_cmk_key_vault_key_id
+
+  #sku needs to be premium to set true values
+  customer_managed_key_enabled      = false
+  infrastructure_encryption_enabled = false
+
+
+
+  tags = local.main_tags
+
+}
+
