@@ -2,7 +2,7 @@
 #Bootstrap Variables# 
 #####################
 state_container_name = "terraform-state"
-state_key            = "terraform.tfstate.prod.003-headless-vm"
+state_key            = "terraform.tfstate.prod.mdp-003"
 
 
 ##################################################

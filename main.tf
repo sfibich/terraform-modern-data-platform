@@ -45,3 +45,6 @@ resource "azurerm_databricks_workspace" "mdp" {
 
 }
 
+
+
+
