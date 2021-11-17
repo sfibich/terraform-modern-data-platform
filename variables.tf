@@ -4,6 +4,12 @@ variable "prefix" {
   default     = "mdp"
 }
 
+variable "company_name" {
+  type        = string
+  description = "The name of the company the modern data platform is built for"
+  default     = "WrG"
+}
+
 variable "machine_number" {
   type        = string
   description = "unique instance number to be a suffix to the overall resource name and resource group"
