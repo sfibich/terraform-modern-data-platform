@@ -71,21 +71,21 @@ resource "azurerm_subnet" "private" {
 
 resource "azurerm_subnet_network_security_group_association" "private" {
   subnet_id                 = azurerm_subnet.private.id
-  network_security_group_id = azurerm_network_security_group.example.id
+  network_security_group_id = azurerm_network_security_group.mdp_adb.id
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
   subnet_id                 = azurerm_subnet.public.id
-  network_security_group_id = azurerm_network_security_group.example.id
+  network_security_group_id = azurerm_network_security_group.mdp_adb.id
 }
 
-resource "azurerm_network_security_group" "example" {
+resource "azurerm_network_security_group" "mdp_adb" {
   name                = "${var.prefix}-databricks-nsg"
   location            = azurerm_resource_group.mdp.location
   resource_group_name = azurerm_resource_group.mdp.name
 }
 
-resource "azurerm_databricks_workspace" "example" {
+resource "azurerm_databricks_workspace" "mdp_adb" {
   name                        = "DBW-${var.prefix}"
   resource_group_name         = azurerm_resource_group.mdp.name
   location                    = azurerm_resource_group.mdp.location
@@ -93,7 +93,7 @@ resource "azurerm_databricks_workspace" "example" {
   managed_resource_group_name = "${var.prefix}-DBW-managed-with-lb"
 
   public_network_access_enabled         = true
-  load_balancer_backend_address_pool_id = azurerm_lb_backend_address_pool.example.id
+  load_balancer_backend_address_pool_id = azurerm_lb_backend_address_pool.mdp_adb.id
 
   custom_parameters {
     no_public_ip        = true
@@ -109,7 +109,7 @@ resource "azurerm_databricks_workspace" "example" {
 
 }
 
-resource "azurerm_public_ip" "example" {
+resource "azurerm_public_ip" "mdp_adb" {
   name                    = "Databricks-LB-PublicIP"
   location                = azurerm_resource_group.mdp.location
   resource_group_name     = azurerm_resource_group.mdp.name
@@ -121,7 +121,7 @@ resource "azurerm_public_ip" "example" {
 
 }
 
-resource "azurerm_lb" "example" {
+resource "azurerm_lb" "mdp_adb" {
   name                = "Databricks-LB"
   location            = azurerm_resource_group.mdp.location
   resource_group_name = azurerm_resource_group.mdp.name
@@ -130,30 +130,30 @@ resource "azurerm_lb" "example" {
 
   frontend_ip_configuration {
     name                 = "Databricks-PIP"
-    public_ip_address_id = azurerm_public_ip.example.id
+    public_ip_address_id = azurerm_public_ip.mdp_adb.id
   }
   tags = local.main_tags
 }
 
-resource "azurerm_lb_outbound_rule" "example" {
+resource "azurerm_lb_outbound_rule" "mdp_adb" {
   name                = "Databricks-LB-Outbound-Rules"
   resource_group_name = azurerm_resource_group.mdp.name
 
-  loadbalancer_id          = azurerm_lb.example.id
+  loadbalancer_id          = azurerm_lb.mdp_adb.id
   protocol                 = "All"
   enable_tcp_reset         = true
   allocated_outbound_ports = 1024
   idle_timeout_in_minutes  = 4
 
-  backend_address_pool_id = azurerm_lb_backend_address_pool.example.id
+  backend_address_pool_id = azurerm_lb_backend_address_pool.mdp_adb.id
 
   frontend_ip_configuration {
-    name = azurerm_lb.example.frontend_ip_configuration.0.name
+    name = azurerm_lb.mdp_adb.frontend_ip_configuration.0.name
   }
 }
 
-resource "azurerm_lb_backend_address_pool" "example" {
-  loadbalancer_id = azurerm_lb.example.id
+resource "azurerm_lb_backend_address_pool" "mdp_adb" {
+  loadbalancer_id = azurerm_lb.mdp_adb.id
   name            = "Databricks-BE"
 }
 
