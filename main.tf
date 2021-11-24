@@ -2,6 +2,7 @@ locals {
   main_tags        = merge(var.tags, var.env_tags)
   allowed_list_ips = split(",", coalesce(var.allowed_list_ips, chomp(data.http.icanhazip.body)))
   default_name     = "${var.prefix}-${var.company_name}-${random_string.suffix.result}"
+  raw_storage_name = "${lower(var.prefix)}raw${lower(var.company_name)}${random_string.suffix.result}"
 }
 
 resource "random_pet" "server" {
@@ -160,3 +161,43 @@ resource "azurerm_lb_backend_address_pool" "mdp_adb" {
 }
 
 
+
+# Create a default cluster named terraform-mount and mount the exmple container of the RAW Storage Container
+data "azurerm_databricks_workspace" "this" {
+  name                = azurerm_databricks_workspace.mdp_adb.name
+  resource_group_name = azurerm_resource_group.mdp.name
+}
+
+provider "databricks" {
+  host = data.azurerm_databricks_workspace.this.workspace_url
+}
+
+resource "databricks_secret_scope" "terraform" {
+  name                     = "application"
+  initial_manage_principal = "users"
+}
+
+resource "databricks_secret" "storage_key" {
+  key          = "blob_storage_key"
+  string_value = azurerm_storage_account.raw.primary_access_key
+  scope        = databricks_secret_scope.terraform.name
+}
+
+resource "databricks_mount" "raw" {
+  name = "example"
+  wasb {
+    container_name       = azurerm_storage_container.raw_example.name
+    storage_account_name = azurerm_storage_account.raw.name
+    auth_type            = "ACCESS_KEY"
+    token_secret_scope   = databricks_secret_scope.terraform.name
+    token_secret_key     = databricks_secret.storage_key.key
+  }
+}
+
+
+
+resource "databricks_notebook" "example" {
+  content_base64 = filebase64("test.ipynb")
+  path           = "/Shared/test"
+  language       = "PYTHON"
+}

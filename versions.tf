@@ -14,9 +14,12 @@ terraform {
       source  = "hashicorp/http"
       version = ">=2.1.0"
     }
+
+    databricks = {
+      source  = "databrickslabs/databricks"
+      version = "0.3.11"
+    }
   }
 
   required_version = ">= 1.0.5"
 }
-
-
