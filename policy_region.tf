@@ -1,8 +1,8 @@
-resource "azurerm_policy_definition" "example" {
-  name         = "my-policy-definition"
+resource "azurerm_policy_definition" "region" {
+  name         = "region-definition"
   policy_type  = "Custom"
   mode         = "All"
-  display_name = "my-policy-definition"
+  display_name = "region-definition"
 
   policy_rule = <<POLICY_RULE
     {
@@ -35,12 +35,12 @@ PARAMETERS
 }
 
 
-resource "azurerm_policy_assignment" "example" {
-  name                 = "example-policy-assignment"
-  scope                = azurerm_resource_group.mdp.id
-  policy_definition_id = azurerm_policy_definition.example.id
-  description          = "Policy Assignment created via an Acceptance Test"
-  display_name         = "My Example Policy Assignment"
+resource "azurerm_resource_group_policy_assignment" "region" {
+  name                 = "region-assignment"
+  resource_group_id    = azurerm_resource_group.mdp.id
+  policy_definition_id = azurerm_policy_definition.region.id
+  description          = "Policy Assignment for valid Azure Region assignments"
+  display_name         = "region-assignment"
 
   metadata = <<METADATA
     {
@@ -51,7 +51,7 @@ METADATA
   parameters = <<PARAMETERS
 {
   "allowedLocations": {
-    "value": [ "West Europe" ]
+    "value": [ "eastus2","centralus" ]
   }
 }
 PARAMETERS

@@ -16,6 +16,7 @@ resource "random_string" "suffix" {
 resource "azurerm_resource_group" "mdp" {
   name     = "${var.prefix}-${var.company_name}-${random_string.suffix.result}"
   location = "East US2"
+  tags     = local.main_tags
 }
 
 
