@@ -1,6 +1,7 @@
 locals {
   main_tags        = merge(var.tags, var.env_tags)
   allowed_list_ips = split(",", coalesce(var.allowed_list_ips, chomp(data.http.icanhazip.body)))
+  default_name     = "${var.prefix}-${var.company_name}-${random_string.suffix.result}"
 }
 
 resource "random_pet" "server" {
@@ -14,7 +15,7 @@ resource "random_string" "suffix" {
 
 
 resource "azurerm_resource_group" "mdp" {
-  name     = "${var.prefix}-${var.company_name}-${random_string.suffix.result}"
+  name     = "dbw-${local.default_name}"
   location = "East US2"
   tags     = local.main_tags
 }
@@ -87,11 +88,11 @@ resource "azurerm_network_security_group" "mdp_adb" {
 }
 
 resource "azurerm_databricks_workspace" "mdp_adb" {
-  name                        = "DBW-${var.prefix}"
+  name                        = "dbw-${local.default_name}"
   resource_group_name         = azurerm_resource_group.mdp.name
   location                    = azurerm_resource_group.mdp.location
   sku                         = "premium"
-  managed_resource_group_name = "${var.prefix}-DBW-managed-with-lb"
+  managed_resource_group_name = "dbw-managed-${local.default_name}"
 
   public_network_access_enabled         = true
   load_balancer_backend_address_pool_id = azurerm_lb_backend_address_pool.mdp_adb.id
