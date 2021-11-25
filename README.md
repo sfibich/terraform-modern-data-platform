@@ -1,4 +1,5 @@
 #terraform-moder-data-platform:
+
 Modern Data Platform environment created using terraform
 
 ![mdp-release1-details](mdp-release1-details.jpeg)
@@ -9,8 +10,8 @@ Modern Data Platform environment created using terraform
 
 - [Intro](#intro)
 - [Requirements](#requirements)
-- [1 - Resource Group](#1)
-- [Executing the Terraform](#Execution)
+- [1 - Resource Group](#1-core-resource-group)
+- [Executing the Terraform](#executing-the-terraform)
 
 
 ## Requirements
@@ -19,11 +20,11 @@ Modern Data Platform environment created using terraform
 - Terraform
 
 
-## 1 Resource Group
+## 1 Core Resource Group
 
 
 
-## Execution the Terraform
+## Executing the Terraform
 
 ### Initial Setup 
 (once per environment) 
