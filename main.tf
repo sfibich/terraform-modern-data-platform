@@ -113,7 +113,7 @@ resource "azurerm_databricks_workspace" "mdp_adb" {
 }
 
 resource "azurerm_public_ip" "mdp_adb" {
-  name                    = "Databricks-LB-PublicIP"
+  name                    = "databricks-lb-public-ip"
   location                = azurerm_resource_group.mdp.location
   resource_group_name     = azurerm_resource_group.mdp.name
   idle_timeout_in_minutes = 4
@@ -125,21 +125,21 @@ resource "azurerm_public_ip" "mdp_adb" {
 }
 
 resource "azurerm_lb" "mdp_adb" {
-  name                = "Databricks-LB"
+  name                = "databricks-lb"
   location            = azurerm_resource_group.mdp.location
   resource_group_name = azurerm_resource_group.mdp.name
 
   sku = "Standard"
 
   frontend_ip_configuration {
-    name                 = "Databricks-PIP"
+    name                 = "databricks-pip"
     public_ip_address_id = azurerm_public_ip.mdp_adb.id
   }
   tags = local.main_tags
 }
 
 resource "azurerm_lb_outbound_rule" "mdp_adb" {
-  name                = "Databricks-LB-Outbound-Rules"
+  name                = "databricks-lb-outbound-rules"
   resource_group_name = azurerm_resource_group.mdp.name
 
   loadbalancer_id          = azurerm_lb.mdp_adb.id
