@@ -44,7 +44,7 @@ az account login
 ./ConfigureAzureForSecureTerraformAccess.sh
 ```
 
-### Bootstrapping - from example directory
+### Bootstrapping & executing
 (per project/environment switch)
 
 ```
@@ -52,6 +52,7 @@ source ../TerraformAzureBootstrap.sh -f dev/dev.tfvars
 terraform apply -var-file dev/dev.tfvars
 ```
 
-### Example 1
-source ../terraform-azure-bootstrap/TerraformAzureBootstrap.sh -f env/dev.tfvars
+### Executing after bootstrapping
+```
 terraform apply --var-file env/dev.tfvars
+```
