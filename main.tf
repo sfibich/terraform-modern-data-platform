@@ -166,6 +166,7 @@ resource "azurerm_lb_backend_address_pool" "mdp_adb" {
 data "azurerm_databricks_workspace" "this" {
   name                = azurerm_databricks_workspace.mdp_adb.name
   resource_group_name = azurerm_resource_group.mdp.name
+  depends_on          = [azurerm_databricks_workspace.mdp_adb]
 }
 
 provider "databricks" {
@@ -194,10 +195,9 @@ resource "databricks_mount" "raw" {
   }
 }
 
-
-
 resource "databricks_notebook" "example" {
   content_base64 = filebase64("test.ipynb")
   path           = "/Shared/test"
   language       = "PYTHON"
 }
+
