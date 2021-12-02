@@ -10,6 +10,11 @@ resource "azurerm_storage_account" "raw" {
   tags                     = local.main_tags
 }
 
+resource "azurerm_storage_container" "haystack" {
+  name                  = "haystack"
+  storage_account_name  = azurerm_storage_account.raw.name
+  container_access_type = "private"
+}
 
 resource "azurerm_storage_container" "raw_example" {
   name                  = "example"
