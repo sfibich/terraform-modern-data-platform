@@ -55,7 +55,7 @@ PARAMETERS
 
 resource "azurerm_resource_group_policy_assignment" "region" {
   name                 = "region-assignment"
-  resource_group_id    = azurerm_resource_group.mdp.id
+  resource_group_id    = var.resource_group_id
   policy_definition_id = azurerm_policy_definition.region.id
   description          = "Policy Assignment for valid Azure Region assignments"
   display_name         = "region-assignment"
@@ -65,4 +65,5 @@ resource "azurerm_resource_group_policy_assignment" "region" {
   parameters = local.policy_assignment_parameters
 
 }
+
 

@@ -5,6 +5,12 @@ locals {
   raw_storage_name = "${lower(var.prefix)}raw${lower(var.company_name)}${random_string.suffix.result}"
 }
 
+
+module "azure_policies" {
+  source            = "./modules/azure_policies"
+  resource_group_id = azurerm_resource_group.mdp.id
+}
+
 resource "random_pet" "server" {
 }
 
