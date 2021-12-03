@@ -201,9 +201,21 @@ resource "databricks_mount" "raw" {
   }
 }
 
+resource "databricks_mount" "haystak" {
+  name = "haystack"
+  wasb {
+    container_name       = azurerm_storage_container.haystack.name
+    storage_account_name = azurerm_storage_account.raw.name
+    auth_type            = "ACCESS_KEY"
+    token_secret_scope   = databricks_secret_scope.terraform.name
+    token_secret_key     = databricks_secret.storage_key.key
+  }
+}
+
+
 resource "databricks_notebook" "example" {
   content_base64 = filebase64("test.ipynb")
-  path           = "/Shared/test"
+  path           = "/Shared/test/test.ipynb"
   language       = "PYTHON"
 }
 
