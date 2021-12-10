@@ -48,8 +48,8 @@ az account login
 (per project/environment switch)
 
 ```
-source ../TerraformAzureBootstrap.sh -f dev/dev.tfvars
-terraform apply -var-file dev/dev.tfvars
+source ../terraform-azure-bootstrap/TerraformAzureBootstrap.sh -f env/dev.tfvars
+terraform apply -var-file env/dev.tfvars
 ```
 
 ### Executing after bootstrapping
